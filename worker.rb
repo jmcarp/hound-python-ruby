@@ -12,6 +12,10 @@ end
 
 module Worker
   def self.perform(params)
+    Resque.configure do |config|
+      config.redis = ENV['REDISTOGO_URL']
+    end
+
     filename = params.fetch(:filename)
     content = params.fetch(:content)
     commit = params.fetch(:commit)
