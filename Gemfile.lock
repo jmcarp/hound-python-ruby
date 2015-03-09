@@ -36,3 +36,4 @@ DEPENDENCIES
   rake
   resque
   scss-lint (= 0.34.0)
+  sinatra

@@ -1,9 +1,9 @@
-require 'resque/tasks'
+require "./app.rb"
+require "resque/tasks"
 
 task "resque:setup" do
-  ENV['QUEUE'] = "scss"
+  ENV["QUEUE"] = "scss"
 end
 
-desc "Alias for resque:work (To run workers on Heroku)" do
-  task "jobs:work" => "resque:work"
-end
+desc "Alias for resque:work (To run workers on Heroku)"
+task "jobs:work" => "resque:work"

@@ -1,14 +1,6 @@
 require "scss_lint"
 require "resque"
-require "uri"
 require "yaml"
-
-uri = URI.parse(ENV["REDISTOGO_URL"])
-Resque.redis = Redis.new(
-  :host => uri.host,
-  :port => uri.port,
-  :password => uri.password
-)
 
 class ReviewJob
   @queue = :review
