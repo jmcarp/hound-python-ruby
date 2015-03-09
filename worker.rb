@@ -1,6 +1,11 @@
 require "scss_lint"
 require "resque"
+require "uri"
 require "yaml"
+
+uri = URI.parse(ENV.fetch("REDISTOGO_URL"))
+REDIS = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
+Resque.redis = REDIS
 
 class ReviewJob
   @queue = :review
@@ -12,10 +17,6 @@ end
 
 module Worker
   def self.perform(params)
-    Resque.configure do |config|
-      config.redis = ENV['REDISTOGO_URL']
-    end
-
     filename = params.fetch(:filename)
     content = params.fetch(:content)
     commit = params.fetch(:commit)
