@@ -6,13 +6,15 @@ class ReviewJob
   @queue = :review
 end
 
-module Worker
-  @queue = :scss
+class FailedReviewJob
+  @queue = :review
+end
 
+module Worker
   def self.perform(params)
     filename = params.fetch(:filename)
     content = params.fetch(:content)
-    build_id = params.fetch(:build_id)
+    commit = params.fetch(:commit)
 
     config_options = YAML.load(params.fetch(:custom_config).to_s) ||
       YAML.load(params.fetch(:default_config))
@@ -33,16 +35,16 @@ module Worker
 
     Resque.enqueue(
       ReviewJob,
-      build_id: build_id,
       filename: filename,
+      commit: commit,
       content: content,
       violations: violations
     )
   rescue => exception
     Resque.enqueue(
       FailedReviewJob,
-      build_id: build_id,
       filename: filename,
+      commit: commit,
       error: exception.message
     )
   end
