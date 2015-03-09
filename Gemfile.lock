@@ -7,6 +7,7 @@ GEM
     rack-protection (1.5.3)
       rack
     rainbow (2.0.0)
+    rake (10.4.2)
     redis (3.2.1)
     redis-namespace (1.5.1)
       redis (~> 3.0, >= 3.0.4)
@@ -32,6 +33,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  rake
   resque
   scss-lint (= 0.34.0)
-  sinatra
