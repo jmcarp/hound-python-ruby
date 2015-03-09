@@ -3,9 +3,12 @@ require "resque"
 require "uri"
 require "yaml"
 
-uri = URI.parse(ENV.fetch("REDISTOGO_URL"))
-REDIS = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
-Resque.redis = REDIS
+uri = URI.parse(ENV["REDISTOGO_URL"])
+Resque.redis = Redis.new(
+  :host => uri.host,
+  :port => uri.port,
+  :password => uri.password
+)
 
 class ReviewJob
   @queue = :review
@@ -16,6 +19,8 @@ class FailedReviewJob
 end
 
 module Worker
+  @queue = :scss
+
   def self.perform(params)
     filename = params.fetch(:filename)
     content = params.fetch(:content)
