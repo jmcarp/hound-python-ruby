@@ -10,16 +10,19 @@ module Worker
   @queue = :scss
 
   def self.perform(params)
+    filename = params.fetch(:filename)
+    content = params.fetch(:content)
+    build_id = params.fetch(:build_id)
+
     config_options = YAML.load(params.fetch(:custom_config).to_s) ||
       YAML.load(params.fetch(:default_config))
     scss_lint_config = SCSSLint::Config.new(config_options.to_hash)
-
     runner = SCSSLint::Runner.new(scss_lint_config)
 
-    violations = if merged_config.excluded_file?(params.fetch(:filename))
+    violations = if scss_lint_config.excluded_file?(filename)
       []
     else
-      runner.run([params.fetch(:content)])
+      runner.run([content])
       runner.lints.map do |violation|
         {
           line: violation.line,
@@ -30,12 +33,17 @@ module Worker
 
     Resque.enqueue(
       ReviewJob,
-      build_id: params.fetch(:build_id),
-      pull_request_id: params.fetch(:pull_request_id),
-      commit: params.fetch(:commit),
-      filename: params.fetch(:filename),
-      content: params.fetch(:content),
+      build_id: build_id,
+      filename: filename,
+      content: content,
       violations: violations
+    )
+  rescue => exception
+    Resque.enqueue(
+      FailedReviewJob,
+      build_id: build_id,
+      filename: filename,
+      error: exception.message
     )
   end
 end
