@@ -10,7 +10,7 @@ class FailedReviewJob
   @queue = :review
 end
 
-module Worker
+class Worker
   @queue = :scss
 
   def self.perform(params)
