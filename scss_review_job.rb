@@ -17,8 +17,9 @@ class ScssReviewJob
       repo_name: attributes.fetch(:repo_name),
       filename: attributes.fetch(:filename),
       commit_sha: attributes.fetch(:commit_sha),
+      patch: attributes.fetch(:patch),
       violations: [
-        # { line: nil, message: "" }
+        { line: 123, message: "Wat!!!" }
       ]
     )
   end
