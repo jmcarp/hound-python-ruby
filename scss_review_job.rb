@@ -19,7 +19,7 @@ class ScssReviewJob
       commit_sha: attributes.fetch("commit_sha"),
       patch: attributes.fetch("patch"),
       violations: [
-        { line: 123, message: "Wat!!!" }
+        { line: 1, message: "Wat!!!" }
       ]
     )
   end
