@@ -1,6 +1,7 @@
 require "sinatra"
 require "resque"
 require "./scss_review_job"
+require "./review_job"
 
 configure do
   uri = URI.parse(ENV.fetch("REDISTOGO_URL"))
