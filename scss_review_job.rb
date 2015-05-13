@@ -14,10 +14,10 @@ class ScssReviewJob
 
     Resque.enqueue(
       ReviewJob,
-      repo_name: attributes.fetch(:repo_name),
-      filename: attributes.fetch(:filename),
-      commit_sha: attributes.fetch(:commit_sha),
-      patch: attributes.fetch(:patch),
+      repo_name: attributes.fetch("repo_name"),
+      filename: attributes.fetch("filename"),
+      commit_sha: attributes.fetch("commit_sha"),
+      patch: attributes.fetch("patch"),
       violations: [
         { line: 123, message: "Wat!!!" }
       ]
