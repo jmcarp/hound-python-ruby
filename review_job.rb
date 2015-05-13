@@ -1,3 +1,3 @@
 class ReviewJob
-  @queue = :review
+  @queue = :high
 end
