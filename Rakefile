@@ -1,4 +1,21 @@
-require "./app.rb"
+ENV["RACK_ENV"] ||= "development"
+
+require "bundler"
+Bundler.require :default, ENV["RACK_ENV"].to_sym
+
+require_relative "scss_review_job"
+require_relative "review_job"
+
+if ENV["REDISTOGO_URL"]
+  uri = URI.parse(ENV["REDISTOGO_URL"])
+  REDIS = Redis.new(
+    host: uri.host,
+    port: uri.port,
+    password: uri.password
+  )
+  Resque.redis = REDIS
+end
+
 require "resque/tasks"
 
 task "resque:setup" do
@@ -7,3 +24,13 @@ end
 
 desc "Alias for resque:work (To run workers on Heroku)"
 task "jobs:work" => "resque:work"
+
+if ENV["RACK_ENV"] == "development" || ENV["RACK_ENV"] == "test"
+  require "rspec/core/rake_task"
+
+  RSpec::Core::RakeTask.new :specs do |task|
+    task.pattern = Dir['spec/**/*_spec.rb']
+  end
+
+  task :default => ["specs"]
+end

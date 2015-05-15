@@ -1,4 +1,5 @@
 require "resque"
+require_relative "review_job"
 
 class ScssReviewJob
   @queue = :scss_review
