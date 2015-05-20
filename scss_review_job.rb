@@ -1,8 +1,8 @@
 require "resque"
-require "yaml"
 require "scss_lint"
 
 require_relative "review_job"
+require_relative "config_options"
 
 class ScssReviewJob
   @queue = :scss_review
@@ -13,22 +13,26 @@ class ScssReviewJob
     # commit_sha
     # patch
     # content
-    # default_config?
-    # custom_config
+    # config
 
-    options = YAML.load_file("config/default.yml")
-    scss_lint_config = SCSSLint::Config.new(options)
-    scss_lint_runner = SCSSLint::Runner.new(scss_lint_config)
-    scss_lint_runner.run([attributes["content"]])
+    config_options = ConfigOptions.new(attributes["config"])
+    scss_lint_config = SCSSLint::Config.new(config_options.to_hash)
+    filename = attributes.fetch("filename")
+    violations = []
 
-    violations = scss_lint_runner.lints.map do |lint|
-      { line: lint.location.line, message: lint.description }
+    unless scss_lint_config.excluded_file?(filename)
+      scss_lint_runner = SCSSLint::Runner.new(scss_lint_config)
+      scss_lint_runner.run([attributes["content"]])
+
+      violations = scss_lint_runner.lints.map do |lint|
+        { line: lint.location.line, message: lint.description }
+      end
     end
 
     Resque.enqueue(
       ReviewJob,
       repo_name: attributes.fetch("repo_name"),
-      filename: attributes.fetch("filename"),
+      filename: filename,
       commit_sha: attributes.fetch("commit_sha"),
       patch: attributes.fetch("patch"),
       violations: violations
