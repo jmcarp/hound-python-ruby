@@ -1,7 +1,7 @@
 require "resque"
 require "scss_lint"
 
-require_relative "review_job"
+require_relative "completed_file_review_job"
 require_relative "config_options"
 
 class ScssReviewJob
@@ -30,7 +30,7 @@ class ScssReviewJob
     end
 
     Resque.enqueue(
-      ReviewJob,
+      CompletedFileReviewJob,
       repo_name: attributes.fetch("repo_name"),
       filename: filename,
       commit_sha: attributes.fetch("commit_sha"),

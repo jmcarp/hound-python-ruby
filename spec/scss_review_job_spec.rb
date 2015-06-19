@@ -16,7 +16,7 @@ describe ScssReviewJob do
         )
 
         expect(Resque).to have_received("enqueue").with(
-          ReviewJob,
+          CompletedFileReviewJob,
           repo_name: "jimtom/test",
           filename: "test.scss",
           commit_sha: "123abc",
@@ -47,7 +47,7 @@ linters:
         )
 
         expect(Resque).to have_received("enqueue").with(
-          ReviewJob,
+          CompletedFileReviewJob,
           repo_name: "jimtom/test",
           filename: "test.scss",
           commit_sha: "123abc",
@@ -74,7 +74,7 @@ exclude:
         )
 
         expect(Resque).to have_received("enqueue").with(
-          ReviewJob,
+          CompletedFileReviewJob,
           repo_name: "jimtom/test",
           filename: "test.scss",
           commit_sha: "123abc",

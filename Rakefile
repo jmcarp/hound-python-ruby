@@ -1,7 +1,7 @@
 ENV["RACK_ENV"] ||= "development"
 
 require_relative "scss_review_job"
-require_relative "review_job"
+require_relative "completed_file_review_job"
 
 if ENV["REDISTOGO_URL"]
   uri = URI.parse(ENV["REDISTOGO_URL"])
