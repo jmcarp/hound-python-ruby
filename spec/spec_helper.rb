@@ -1,6 +1,6 @@
 $: << File.expand_path(".")
 
 ENV["RACK_ENV"] = "test"
-ENV["REDISTOGO_URL"] = "http://example.com/redistogo"
+ENV["REDIS_URL"] = "redis://rediswoohoo:abc123@example.com:12345/"
 
 require "byebug"
