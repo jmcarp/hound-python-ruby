@@ -10,7 +10,7 @@ class ScssReviewJob
   def self.perform(attributes)
     # filename
     # commit_sha
-    # patch
+    # patch (pass-through)
     # content
     # config
 
