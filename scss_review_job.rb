@@ -8,7 +8,6 @@ class ScssReviewJob
   @queue = :scss_review
 
   def self.perform(attributes)
-    # repo_name
     # filename
     # commit_sha
     # patch
@@ -31,7 +30,6 @@ class ScssReviewJob
 
     Resque.enqueue(
       CompletedFileReviewJob,
-      repo_name: attributes.fetch("repo_name"),
       filename: filename,
       commit_sha: attributes.fetch("commit_sha"),
       patch: attributes.fetch("patch"),

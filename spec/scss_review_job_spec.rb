@@ -8,7 +8,6 @@ describe ScssReviewJob do
         allow(Resque).to receive("enqueue")
 
         ScssReviewJob.perform(
-          "repo_name" => "jimtom/test",
           "filename" => "test.scss",
           "commit_sha" => "123abc",
           "patch" => "test",
@@ -17,7 +16,6 @@ describe ScssReviewJob do
 
         expect(Resque).to have_received("enqueue").with(
           CompletedFileReviewJob,
-          repo_name: "jimtom/test",
           filename: "test.scss",
           commit_sha: "123abc",
           patch: "test",
@@ -33,7 +31,6 @@ describe ScssReviewJob do
         allow(Resque).to receive("enqueue")
 
         ScssReviewJob.perform(
-          "repo_name" => "jimtom/test",
           "filename" => "test.scss",
           "commit_sha" => "123abc",
           "patch" => "test",
@@ -48,7 +45,6 @@ linters:
 
         expect(Resque).to have_received("enqueue").with(
           CompletedFileReviewJob,
-          repo_name: "jimtom/test",
           filename: "test.scss",
           commit_sha: "123abc",
           patch: "test",
@@ -62,7 +58,6 @@ linters:
         allow(Resque).to receive("enqueue")
 
         ScssReviewJob.perform(
-          "repo_name" => "jimtom/test",
           "filename" => "test.scss",
           "commit_sha" => "123abc",
           "patch" => "test",
@@ -75,7 +70,6 @@ exclude:
 
         expect(Resque).to have_received("enqueue").with(
           CompletedFileReviewJob,
-          repo_name: "jimtom/test",
           filename: "test.scss",
           commit_sha: "123abc",
           patch: "test",
