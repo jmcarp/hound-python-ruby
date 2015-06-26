@@ -23,6 +23,10 @@ class ConfigOptions
       options || {}
     )
     SCSSLint::Config.send(
+      :convert_single_options_to_arrays,
+      merged_options
+    )
+    SCSSLint::Config.send(
       :merge_wildcard_linter_options,
       merged_options
     )
