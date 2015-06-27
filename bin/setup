@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+
+gem install bundler --conservative --no-document
+bundle check || bundle install
+
+# Add binstubs to PATH via export PATH=".git/safe/../../bin:$PATH" in ~/.zshenv
+mkdir -p .git/safe
