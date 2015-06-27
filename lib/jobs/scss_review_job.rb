@@ -1,8 +1,8 @@
 require "resque"
 require "scss_lint"
 
-require_relative "completed_file_review_job"
-require_relative "config_options"
+require "jobs/completed_file_review_job"
+require "config_options"
 
 class ScssReviewJob
   @queue = :scss_review

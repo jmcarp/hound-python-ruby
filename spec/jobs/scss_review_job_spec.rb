@@ -1,5 +1,5 @@
 require "spec_helper"
-require "scss_review_job"
+require "jobs/scss_review_job"
 
 describe ScssReviewJob do
   describe ".perform" do
@@ -91,6 +91,7 @@ exclude:
         ScssReviewJob.perform(
           "filename" => "test.scss",
           "commit_sha" => "123abc",
+          "pull_request_number" => "123",
           "patch" => "test",
           "content" => ".a { display: 'none'; }\n",
           "config" => <<-CONFIG
@@ -103,6 +104,7 @@ exclude:
           CompletedFileReviewJob,
           filename: "test.scss",
           commit_sha: "123abc",
+          pull_request_number: "123",
           patch: "test",
           violations: []
         )
