@@ -10,6 +10,7 @@ class ScssReviewJob
   def self.perform(attributes)
     # filename
     # commit_sha
+    # pull_request_number (pass-through)
     # patch (pass-through)
     # content
     # config
@@ -32,6 +33,7 @@ class ScssReviewJob
       CompletedFileReviewJob,
       filename: filename,
       commit_sha: attributes.fetch("commit_sha"),
+      pull_request_number: attributes.fetch("pull_request_number"),
       patch: attributes.fetch("patch"),
       violations: violations
     )

@@ -10,6 +10,7 @@ describe ScssReviewJob do
         ScssReviewJob.perform(
           "filename" => "test.scss",
           "commit_sha" => "123abc",
+          "pull_request_number" => "123",
           "patch" => "test",
           "content" => ".a { display: 'none'; }\n"
         )
@@ -18,6 +19,7 @@ describe ScssReviewJob do
           CompletedFileReviewJob,
           filename: "test.scss",
           commit_sha: "123abc",
+          pull_request_number: "123",
           patch: "test",
           violations: [
             { line: 1, message: "Prefer double-quoted strings" }
@@ -33,6 +35,7 @@ describe ScssReviewJob do
         ScssReviewJob.perform(
           "filename" => "test.scss",
           "commit_sha" => "123abc",
+          "pull_request_number" => "123",
           "patch" => "test",
           "content" => ".a { display: 'none'; }\n",
           "config" => <<-CONFIG
@@ -47,6 +50,7 @@ linters:
           CompletedFileReviewJob,
           filename: "test.scss",
           commit_sha: "123abc",
+          pull_request_number: "123",
           patch: "test",
           violations: []
         )
@@ -60,6 +64,7 @@ linters:
         ScssReviewJob.perform(
           "filename" => "test.scss",
           "commit_sha" => "123abc",
+          "pull_request_number" => "123",
           "patch" => "test",
           "content" => ".a { display: 'none'; }\n",
           "config" => <<-CONFIG
@@ -72,6 +77,7 @@ exclude:
           CompletedFileReviewJob,
           filename: "test.scss",
           commit_sha: "123abc",
+          pull_request_number: "123",
           patch: "test",
           violations: []
         )
