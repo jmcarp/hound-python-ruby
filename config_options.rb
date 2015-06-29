@@ -22,7 +22,7 @@ class ConfigOptions
       base_options,
       options || {}
     )
-    SCSSLint::Config.send(
+    merged_options = SCSSLint::Config.send(
       :convert_single_options_to_arrays,
       merged_options
     )

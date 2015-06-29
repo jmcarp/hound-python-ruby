@@ -53,7 +53,7 @@ linters:
       end
     end
 
-    context "when file with violations is excluded" do
+    context "when file with violations is excluded as an Array" do
       it "enqueues review job without violations" do
         allow(Resque).to receive("enqueue")
 
@@ -65,6 +65,31 @@ linters:
           "config" => <<-CONFIG
 exclude:
   - "**/test.scss"
+          CONFIG
+        )
+
+        expect(Resque).to have_received("enqueue").with(
+          CompletedFileReviewJob,
+          filename: "test.scss",
+          commit_sha: "123abc",
+          patch: "test",
+          violations: []
+        )
+      end
+    end
+
+    context "when file with violations is excluded as a String" do
+      it "enqueues review job without violations" do
+        allow(Resque).to receive("enqueue")
+
+        ScssReviewJob.perform(
+          "filename" => "test.scss",
+          "commit_sha" => "123abc",
+          "patch" => "test",
+          "content" => ".a { display: 'none'; }\n",
+          "config" => <<-CONFIG
+exclude:
+  "**/test.scss"
           CONFIG
         )
 
