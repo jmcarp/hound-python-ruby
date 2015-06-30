@@ -57,4 +57,6 @@ DEPENDENCIES
   resque
   rspec
   scss-lint (= 0.34.0)
-  sinatra
+
+BUNDLED WITH
+   1.10.5
