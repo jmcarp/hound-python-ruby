@@ -7,3 +7,7 @@ bundle check || bundle install
 
 # Add binstubs to PATH via export PATH=".git/safe/../../bin:$PATH" in ~/.zshenv
 mkdir -p .git/safe
+
+# Set up staging and production git remotes
+git remote add staging git@heroku.com:hound-scss-staging.git
+git remote add production git@heroku.com:hound-scss-production.git
