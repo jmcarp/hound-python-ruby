@@ -1,4 +1,7 @@
 # Hound-SCSS
+
+[![Build Status](https://circleci.com/gh/thoughtbot/hound-scss/tree/master.svg?style=svg)](https://circleci.com/gh/thoughtbot/hound-scss/tree/master)
+
 SCSS review service for Hound.
 
 The service consists of a simple Sinatra app and job class that uses Redis as a
