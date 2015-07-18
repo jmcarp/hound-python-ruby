@@ -1,37 +1,27 @@
-require "yaml"
+require "iniparse"
 
 class ConfigOptions
-  DEFAULT_CONFIG_FILE = "config/default.yml"
+  DEFAULT_CONFIG_FILE = "config/default.ini"
+
+  def load_config(config)
+    opts = IniParse.parse(config || "")
+    entries = opts["flake8"] || []
+    return Hash[entries.collect { |value| [value.key, value.value] }]
+  end
 
   def initialize(config)
-    @custom_options = YAML.load(config || "")
+    @custom_options = load_config(config)
   end
 
   def to_hash
-    merge(default_options, custom_options)
+    default_options.merge(custom_options)
   end
 
   private
 
   attr_reader :custom_options
 
-  def merge(base_options, options)
-    merged_options = SCSSLint::Config.send(
-      :smart_merge,
-      base_options,
-      options || {}
-    )
-    merged_options = SCSSLint::Config.send(
-      :convert_single_options_to_arrays,
-      merged_options
-    )
-    SCSSLint::Config.send(
-      :merge_wildcard_linter_options,
-      merged_options
-    )
-  end
-
   def default_options
-    @default_config ||= YAML.load_file(DEFAULT_CONFIG_FILE)
+    @default_config ||= load_config(File.read(DEFAULT_CONFIG_FILE))
   end
 end

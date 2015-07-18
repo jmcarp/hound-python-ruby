@@ -31,7 +31,8 @@ class PythonReviewJob
     # config
 
     filename = attributes.fetch("filename")
-    violations = lint(attributes["content"])
+    config = ConfigOptions.new(attributes["config"])
+    violations = lint(attributes["content"], config.to_hash)
 
     Resque.enqueue(
       CompletedFileReviewJob,

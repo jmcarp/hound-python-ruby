@@ -50,5 +50,31 @@ describe PythonReviewJob do
         )
       end
     end
+    context "with F401 ignored" do
+      it "ignores violations for unused imports" do
+        allow(Resque).to receive("enqueue")
+
+        PythonReviewJob.perform(
+          "filename" => "test.py",
+          "commit_sha" => "123abc",
+          "pull_request_number" => "123",
+          "patch" => "test",
+          "content" => "import this",
+          "config" => <<-CONFIG
+[flake8]
+ignore=F401
+          CONFIG
+        )
+
+        expect(Resque).to have_received("enqueue").with(
+          CompletedFileReviewJob,
+          filename: "test.py",
+          commit_sha: "123abc",
+          pull_request_number: "123",
+          patch: "test",
+          violations: []
+        )
+      end
+    end
   end
 end
