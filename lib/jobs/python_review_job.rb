@@ -1,11 +1,26 @@
 require "resque"
-require "scss_lint"
 
 require "jobs/completed_file_review_job"
 require "config_options"
 
-class ScssReviewJob
-  @queue = :scss_review
+def lint(content, config = {})
+  opts = config.to_a.map { |key, value| "--#{key} #{value}" }.join(" ")
+  report = `echo "#{content}" | flake8 - #{opts}`
+  report.split("\n").map do |line|
+    parse_flake8_line(line)
+  end
+end
+
+def parse_flake8_line(line)
+  parts = line.split(":")
+  {
+    line: parts[1].to_i,
+    message: parts.drop(3).join(":").strip
+  }
+end
+
+class PythonReviewJob
+  @queue = :python_review
 
   def self.perform(attributes)
     # filename
@@ -15,19 +30,8 @@ class ScssReviewJob
     # content
     # config
 
-    config_options = ConfigOptions.new(attributes["config"])
-    scss_lint_config = SCSSLint::Config.new(config_options.to_hash)
     filename = attributes.fetch("filename")
-    violations = []
-
-    unless scss_lint_config.excluded_file?(filename)
-      scss_lint_runner = SCSSLint::Runner.new(scss_lint_config)
-      scss_lint_runner.run([attributes["content"]])
-
-      violations = scss_lint_runner.lints.map do |lint|
-        { line: lint.location.line, message: lint.description }
-      end
-    end
+    violations = lint(attributes["content"])
 
     Resque.enqueue(
       CompletedFileReviewJob,

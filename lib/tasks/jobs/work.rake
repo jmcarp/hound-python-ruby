@@ -2,7 +2,7 @@ require "config/redis"
 require "resque/tasks"
 
 task "resque:setup" do
-  ENV["QUEUE"] = "scss_review"
+  ENV["QUEUE"] = "python_review"
 end
 
 desc "Alias for resque:work (To run workers on Heroku)"

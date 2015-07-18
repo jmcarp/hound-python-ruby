@@ -1,5 +1,4 @@
 require "yaml"
-require "scss_lint"
 
 class ConfigOptions
   DEFAULT_CONFIG_FILE = "config/default.yml"
