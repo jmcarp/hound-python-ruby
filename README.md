@@ -1,4 +1,4 @@
-# Hound-SCSS
+# Hound-Python
 
 [![Build Status](https://circleci.com/gh/jmcarp/hound-python/tree/master.svg?style=svg)](https://circleci.com/gh/jmcarp/hound-python/tree/master)
 
